@@ -1,0 +1,4 @@
+yarn is way faster than NPM so we will use it
+[] create directory structure
+[] create a NPM project and install all dependencies
+    - Dependencies
