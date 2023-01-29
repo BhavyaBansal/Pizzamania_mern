@@ -8,7 +8,8 @@ const PORT = process.env.PORT || 3000
 app.get('/',(req,res)=>{
     res.render('home');
 })
-
+//Assets
+app.use(express.static('public'))
 app.use(expressLayout)
 app.set('views',path.join(__dirname,'/resources/views'))
 app.set('view engine','ejs')
@@ -18,3 +19,5 @@ app.listen(PORT,()=>{
 
 //GIT vs GITHUB
 // git is a program ans github is a service/company that internally use git
+
+// Laravel mix
