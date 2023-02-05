@@ -42,3 +42,52 @@ section.hero {
   -moz-column-gap: 3rem;
        column-gap: 3rem;
 }
+
+.btn-primary {
+  background: #FE5F1E !important;
+}
+.btn-primary:hover {
+  background: #b23301 !important;
+  transition: all 0.3s ease-in-out;
+}
+
+section.cart {
+  background: #F8F8F8;
+}
+section.cart .amount {
+  color: #FE5F1E;
+}
+
+section.login {
+  background: #F8F8F8;
+  min-height: calc(100vh - 92px);
+}
+section.login a {
+  color: #FE5F1E;
+}
+section.login a:hover {
+  color: #b23301;
+}
+
+section.login form {
+  border: 1px solid lightgray;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+section.register form {
+  border: 1px solid lightgray;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+section.register {
+  background: #F8F8F8;
+  min-height: calc(100vh - 92px);
+}
+section.register a {
+  color: #FE5F1E;
+}
+section.register a:hover {
+  color: #b23301;
+}

@@ -36,3 +36,46 @@ section.hero{
     row-gap:4rem;
     column-gap:3rem;
 }
+.btn-primary{
+    background: $primary!important;
+    &:hover{
+        background: $primary-hover!important;
+        transition: $smooth;
+    }
+}
+section.cart{
+    background: $secondary;
+    .amount{
+        color:$primary;
+    }
+}
+section.login{
+    background: $secondary;
+    min-height: calc(100vh - 92px);
+    a{
+        color: $primary;
+        &:hover{
+            color:$primary-hover;
+        }
+    }
+}
+section.login form{
+    border: 1px solid lightgray;
+    padding: 10px;
+    border-radius: 10px;
+}
+section.register form{
+    border: 1px solid lightgray;
+    padding: 10px;
+    border-radius: 10px;
+}
+section.register{
+    background: $secondary;
+    min-height: calc(100vh - 92px);
+    a{
+        color: $primary;
+        &:hover{
+            color:$primary-hover;
+        }
+    }
+}
