@@ -12,8 +12,8 @@ const PORT = process.env.PORT || 3000;
 const mongoose = require("mongoose");
 const session = require("express-session");
 const flash = require("express-flash");
+const passport = require("passport");
 const MongoDbStore = require("connect-mongo")
-
 
 //Database Connection
 mongoose.set("strictQuery", false);
@@ -37,7 +37,7 @@ conn
 //Session Store
 let mongoStore = MongoDbStore.create({
   mongoUrl: url,
-  collecyion:'Sessions'
+  collection:'Sessions'
 })
 
 //Session config
@@ -49,20 +49,26 @@ app.use(
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 24 Hours
   })
-);
-app.use(flash());
-
-
-//Assets
-app.use(express.static("public"));
-app.use(express.json());
-
-//Global middleware
-app.use((req,res,next)=>{
-  res.locals.session = req.session
-  next()
-})
-
+  );
+  app.use(flash());
+  
+  //Passport config
+  const passportInit = require('./app/config/passport');
+  passportInit(passport)
+  app.use(passport.initialize())
+  app.use(passport.session())
+  //Assets
+  app.use(express.static("public"));
+  app.use(express.urlencoded({ extended:false }));
+  app.use(express.json());
+  
+  //Global middleware
+  app.use((req,res,next)=>{
+    res.locals.session = req.session
+    res.locals.user = req.user
+    next()
+  })
+  
 //set Template engine
 app.use(expressLayout);
 app.set("views", path.join(__dirname, "/resources/views"));
