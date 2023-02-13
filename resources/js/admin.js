@@ -99,4 +99,5 @@ function initAdmin() {
       .join("");
   }
 }
+// module.exports = initAdmin
 export default initAdmin()

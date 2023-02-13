@@ -47,6 +47,7 @@ function initAdmin() {
     }).join("");
   }
 }
+// module.exports = initAdmin
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (initAdmin());
 
 /***/ }),
@@ -59,10 +60,13 @@ function initAdmin() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 /* harmony import */ var noty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! noty */ "./node_modules/noty/lib/noty.js");
 /* harmony import */ var noty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(noty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _admin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./admin */ "./resources/js/admin.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _admin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./admin */ "./resources/js/admin.js");
+
 
 
 
@@ -70,7 +74,7 @@ var addToCart = document.querySelectorAll('.add-to-cart');
 var cartCounter = document.querySelector('#cartCounter');
 // AXIOS
 function updateCart(pizza) {
-  axios__WEBPACK_IMPORTED_MODULE_2__["default"].post('/update-cart', pizza).then(function (res) {
+  axios__WEBPACK_IMPORTED_MODULE_3__["default"].post('/update-cart', pizza).then(function (res) {
     // console.log(res);
     cartCounter.innerText = res.data.totalQty;
     new (noty__WEBPACK_IMPORTED_MODULE_0___default())({
@@ -103,7 +107,45 @@ if (alertMsg) {
     alertMsg.remove();
   }, 2000);
 }
-(0,_admin__WEBPACK_IMPORTED_MODULE_1__.initAdmin)();
+// Change Order Status
+var statuses = document.querySelectorAll(".status_line");
+// console.log(statuses)
+var hinp = document.querySelector("#hiddenInput");
+var order = hinp ? hinp.value : null;
+order = JSON.parse(order);
+var time = document.createElement('small');
+
+// console.log(order);
+function updateStatus(order) {
+  //Login of dynamically changing status 
+  var stepCompleted = true;
+  statuses.forEach(function (status) {
+    var dataProp = status.dataset.status;
+    if (stepCompleted) {
+      status.classList.add('step-completed');
+    }
+    if (dataProp === order.status) {
+      stepCompleted = false;
+      time.innerText = moment__WEBPACK_IMPORTED_MODULE_1___default()(order.updatedAt).format('hh:mm A');
+      status.appendChild(time);
+      time.innerText;
+      if (status.nextElementSibling) {
+        status.nextElementSibling.classList.add('current');
+      }
+    }
+  });
+}
+updateStatus(order);
+
+// Socket 
+var socket = io();
+//Join
+if (order) {
+  socket.emit('join', "order_".concat(order._id));
+}
+// Data will look like - order_ksandjbfsabcwjebdjasb
+
+(0,_admin__WEBPACK_IMPORTED_MODULE_2__.initAdmin)();
 
 /***/ }),
 

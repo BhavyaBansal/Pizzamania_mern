@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Noty from 'noty';
+import moment from 'moment';
 import { initAdmin } from './admin';
 let addToCart = document.querySelectorAll('.add-to-cart')
 let cartCounter = document.querySelector('#cartCounter')
@@ -39,4 +40,44 @@ if(alertMsg){
         alertMsg.remove()
     },2000)
 }
+// Change Order Status
+let statuses = document.querySelectorAll(".status_line");
+// console.log(statuses)
+let hinp = document.querySelector("#hiddenInput");
+let order = hinp ? hinp.value : null;
+order = JSON.parse(order)
+let time = document.createElement('small')
+
+// console.log(order);
+function updateStatus(order){
+    //Login of dynamically changing status 
+    let stepCompleted = true;
+    statuses.forEach((status)=>{
+        let dataProp = status.dataset.status;
+        if(stepCompleted){
+            status.classList.add('step-completed')
+        }
+        if(dataProp === order.status){
+            stepCompleted = false
+            time.innerText = moment(order.updatedAt).format('hh:mm A')
+            status.appendChild(time)
+            time.innerText 
+            if(status.nextElementSibling){
+                status.nextElementSibling.classList.add('current')
+            }
+        }
+    })
+
+}
+updateStatus(order);
+
+// Socket 
+let socket = io()
+//Join
+if(order){
+    socket.emit('join',`order_${order._id}`)
+}
+// Data will look like - order_ksandjbfsabcwjebdjasb
+
 initAdmin()
+

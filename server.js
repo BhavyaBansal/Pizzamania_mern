@@ -70,7 +70,7 @@ app.use(expressLayout);
 app.set("views", path.join(__dirname, "/resources/views"));
 app.set("view engine", "ejs");
 require("./routes/web")(app);
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 
@@ -78,3 +78,14 @@ app.listen(PORT, () => {
 // git is a program ans github is a service/company that internally use git
 
 // Laravel mix
+
+// Socket
+const io = require('socket.io')(server)
+io.on('connection',(socket) => {
+  // Join -- Name should be identifiable and unique
+  console.log(socket.id)
+  socket.on('join',(orderId)=>{
+    // console.log(orderId)
+    socket.join(orderId)    
+  })
+})
