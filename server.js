@@ -12,7 +12,7 @@ const session = require("express-session");
 const flash = require("express-flash");
 const MongoDbStore = require("connect-mongo");
 const passport = require("passport");
-
+const Emitter = require('events');
 //Database Connection
 mongoose.set("strictQuery", false);
 const url = "mongodb://127.0.0.1/pizzamania";
@@ -35,6 +35,9 @@ let mongoStore = MongoDbStore.create({
   mongoUrl: url,
   collection: 'sessions'
 })
+//Event Emitter
+const eventEmitter = new Emitter()
+app.set('eventEmitter',eventEmitter)
 //Session config
 app.use(
   session({
@@ -88,4 +91,11 @@ io.on('connection',(socket) => {
     // console.log(orderId)
     socket.join(orderId)    
   })
+})
+
+eventEmitter.on('orderUpdated',(data)=>{
+  io.to(`order_${data.id}`).emit('orderUpdated',data)
+})
+eventEmitter.on('orderPlaced',(data)=>{
+  io.to('adminRoom').emit('orderPlaced',data)
 })

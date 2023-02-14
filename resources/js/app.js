@@ -50,6 +50,10 @@ let time = document.createElement('small')
 
 // console.log(order);
 function updateStatus(order){
+    statuses.forEach((status)=>{
+        status.classList.remove('step-completed')
+        status.classList.remove('current')
+    })
     //Login of dynamically changing status 
     let stepCompleted = true;
     statuses.forEach((status)=>{
@@ -73,11 +77,31 @@ updateStatus(order);
 
 // Socket 
 let socket = io()
+initAdmin(socket)
 //Join
 if(order){
     socket.emit('join',`order_${order._id}`)
 }
 // Data will look like - order_ksandjbfsabcwjebdjasb
+let adminAreaPath = window.location.pathname
+// console.log(adminAreaPath) 
+if(adminAreaPath.includes('admin')){
+    socket.emit('join','adminRoom')
+}
 
-initAdmin()
+socket.on("orderUpdated",(data)=>{
+    const updatedOrder = {...order}//copying an object order
+    updatedOrder.updatedAt = moment().format()
+    updatedOrder.status = data.status
+    // console.log(data);
+    updateStatus(updatedOrder)
+    new Noty({
+      type: "success",
+      timeout: 1000,
+      text: "Order Status  Updated",
+      progressBar: false,
+    }).show();
+});
+
+
 
